@@ -1,0 +1,31 @@
+#include <gtest/gtest.h>
+#include <cstring>
+ 
+using namespace std;
+ 
+// Function under test...
+bool acceptName(const char* name)
+{
+  char *result = strstr(name, "eek");
+  if(result == NULL){
+    return false;
+  }
+  return true;
+}
+ 
+// A new one of these is create for each test
+class MyStringTest : public testing::TestWithParam<const char*>
+{
+public:
+  virtual void SetUp(){}
+  virtual void TearDown(){}
+};
+ 
+INSTANTIATE_TEST_CASE_P(InstantiationName,
+                        MyStringTest,
+                        ::testing::Values("meek", "geek", "freek"));
+ 
+TEST_P(MyStringTest, acceptsEekyWords)
+{
+  ASSERT_TRUE(acceptName(GetParam()));
+}
